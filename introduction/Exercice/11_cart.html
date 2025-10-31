@@ -1,0 +1,192 @@
+<!-- todo Créer un composant Cart qui gère un panier simple à l'aide de useReducer.
+
+Contraintes :
+L'état initial :
+
+{ items: [], total: 0 }
+Trois actions :
+
+{ type: "add", item: { name: "Product A", price: 10 } }
+{ type: "remove", index: 0 }
+{ type: "clear" } 
+
+Définir un modèle pour vos données
+{ id: 1, name: "Mouse", price: 15, quantity: 1 }
+/*
+{
+  id: number,        // identifiant unique
+  name: string,      // nom du produit
+  price: number,     // prix en €
+  quantity: number   // quantité dans le panier
+}
+*/
+
+Étapes :
+Implémentez le reducer(state, action)
+ajouter un article → items.push() (en version immuable)
+supprimer un article → filtrez le tableau
+vider le panier
+
+Créez trois boutons :
+"Add product"
+"Remove last product"
+"Clear cart"
+
+Affichez :
+La liste des articles
+Le total du panier
+
+Utilisez le pattern des événements :
+chaque bouton déclenche une action claire que reducer interprète.
+C'est exactement la même logique qu'un système d'événements centralisé. -->
+
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cart avec useReducer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      margin-top: 50px;
+      background: #f8f8f8;
+    }
+
+    .cart-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 340px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: orange;
+    }
+
+    button {
+      padding: 8px 12px;
+      background-color: orange;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      margin: 5px 3px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .total {
+      font-weight: bold;
+      text-align: right;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+
+    function cartReducer(state, action) {
+      switch (action.type) {
+        case "add":
+          return {
+            ...state,
+            items: [...state.items, action.item],
+            total: state.total + action.item.price * action.item.quantity,
+          };
+
+        case "remove":
+          const newItems = state.items.filter((_, i) => i !== action.index);
+          const removedItem = state.items[action.index];
+          return {
+            ...state,
+            items: newItems,
+            total: state.total - (removedItem?.price * removedItem?.quantity || 0),
+          };
+
+        case "clear":
+          return { items: [], total: 0 };
+
+        default:
+          return state;
+      }
+    }
+
+    function Cart() {
+      const initialState = { items: [], total: 0 };
+      const [state, dispatch] = React.useReducer(cartReducer, initialState);
+
+      const productExample = {
+        id: Date.now(),
+        name: "Mouse",
+        price: 15,
+        quantity: 1,
+      };
+
+      return (
+        <div className="cart-container">
+          <h2>Mon Panier</h2>
+
+          <div style={{ textAlign: "center" }}>
+            <button onClick={() => dispatch({ type: "add", item: productExample })}>
+              Ajouter un produit
+            </button>
+            <button onClick={() => dispatch({ type: "remove", index: state.items.length - 1 })}>
+              Supprimer le dernier
+            </button>
+            <button onClick={() => dispatch({ type: "clear" })}>
+              Vider le panier
+            </button>
+          </div>
+
+          <ul>
+            {state.items.map((item, index) => (
+              <li key={item.id}>
+                <span>{item.name} × {item.quantity}</span>
+                <span>{item.price * item.quantity} €</span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="total">Total : {state.total} €</div>
+        </div>
+      );
+    }
+
+    function App() {
+      return <Cart />;
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+
+  </script>
+</body>
+</html>
+
+

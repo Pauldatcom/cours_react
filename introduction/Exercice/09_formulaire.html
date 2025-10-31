@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React sans JSX</title>
+    <style>
+      .title {
+        color: orange;
+        text-align: center;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-top: 30px;
+      }
+
+      input {
+        padding: 8px;
+        width: 200px;
+      }
+
+      button {
+        padding: 8px 16px;
+        background-color: orange;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      function LoginForm() {
+        const [email, setEmail] = React.useState("");
+        const [password, setPassword] = React.useState("");
+
+        const handleSubmit = (event) => {
+          event.preventDefault();
+          console.log("Email :", email);
+          console.log("Password :", password);
+          setEmail("");
+          setPassword("");
+        };
+
+        return (
+          <form onSubmit={handleSubmit}>
+            <h2 className="title">Login Form</h2>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Mot de passe"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+            />
+            <button type="submit">Submit</button>
+          </form>
+        );
+      }
+
+      function App() {
+        return (
+          <div>
+            <LoginForm />
+          </div>
+        );
+      }
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>

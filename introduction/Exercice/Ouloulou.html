@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React sans JSX</title>
+    <style>
+      .title {
+        color: orange;
+      }
+      .background {
+        background-color: #500be5;
+        padding: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root" class="background"></div>
+
+    <!-- React et ReactDOM via CDN -->
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+
+    <script>
+      const [state, setState] = React.useState(valeurInitiale);
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+
+      function ProfileCard(props) {
+        const price = Number(props.price) || 0;
+        const inStock = price > 20;
+        const statusText = inStock ? "On sale" : "Out of stock";
+
+        return React.createElement("div", { className: "profile-card" }, [
+          React.createElement("img", {
+            src: "https://i.pravatar.cc/80?u=alice" + (props.name || "user"),
+            width: 80,
+            height: 80,
+            key: "img-" + props.name,
+          }),
+          React.createElement(
+            "h2",
+            { key: "name-" + props.name },
+            props.name || "Alice"
+          ),
+          React.createElement(
+            "p",
+            { key: "price-" + props.name },
+            price + " USD"
+          ),
+          React.createElement("p", { key: "status-" + props.name }, statusText),
+        ]);
+      }
+
+      function App() {
+        return React.createElement("div", null, [
+          React.createElement(
+            ProfileCard,
+            { key: 1, name: "Alice", price: 10 },
+            null
+          ),
+          React.createElement(
+            ProfileCard,
+            { key: 2, name: "Bob", price: 25 },
+            null
+          ),
+          React.createElement(
+            ProfileCard,
+            { key: 3, name: "Sophie", price: 20 },
+            null
+          ),
+        ]);
+      }
+
+      const app = React.createElement(App, null, []);
+      root.render(app);
+    </script>
+  </body>
+</html>

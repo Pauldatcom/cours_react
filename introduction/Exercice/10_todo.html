@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ToDo List React</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      margin-top: 50px;
+    }
+
+    .todo-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: orange;
+    }
+
+    form {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 8px;
+    }
+
+    button {
+      padding: 8px 12px;
+      background-color: orange;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    li.done span {
+      text-decoration: line-through;
+      color: gray;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    function TodoList() {
+      const [task, setTask] = React.useState("");
+      const [todos, setTodos] = React.useState([]);
+
+      // The destructuring syntax is a JavaScript syntax
+      // that makes it possible to unpack values from arrays, or properties from objects, 
+      // into distinct variables.
+      // It can be used in locations that receive data (such as the left-hand side of an assignment or anywhere that creates new identifier bindings).
+      const handleSubmit = (event) => {
+        event.preventDefault();
+        if (task.trim() === "") return;
+        setTodos([...todos, { text: task, done: false }]); // todo revoir le concept des 3 petit points qui re render, exemple avec une liste si on ajoute un element alors cela re render
+        setTask("");
+      };
+
+      const toggleDone = (index) => {
+        const newTodos = [...todos];
+        newTodos[index].done = !newTodos[index].done;
+        setTodos(newTodos);
+      };
+
+      return (
+        <div className="todo-container">
+          <h2>Todo List</h2>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Nouvelle tâche..."
+              value={task}
+              onChange={(e) => setTask(e.target.value)}
+            />
+            <button type="submit">Ajouter</button>
+          </form>
+          <ul>
+            {todos.map((todo, index) => (
+              <li key={index} className={todo.done ? "done" : ""}>
+                <input
+                  type="checkbox"
+                  checked={todo.done}
+                  onChange={() => toggleDone(index)}
+                />
+                <span>{todo.text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+    function App() {
+      return <TodoList />;
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+
+</html>

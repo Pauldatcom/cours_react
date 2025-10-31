@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      const students = [
+        { id: 1, name: "Alan" },
+        { id: 2, name: "Alice" },
+        { id: 3, name: "Sophie" },
+      ];
+      function Hello() {
+        return <h2>Hello from MyBig Component!</h2>;
+      }
+      function App() {
+        return (
+          <div>
+            <Hello />
+            <p>This is a big component example.</p>
+            <ul>
+              {students.map((s) => (
+                <li key={s.id}>{s.name}</li>
+              ))}
+            </ul>
+          </div>
+        );
+      }
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>

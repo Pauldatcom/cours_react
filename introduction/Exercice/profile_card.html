@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script>
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+
+        // Création d'éléments React sans JSX
+        {
+          const name = React.createElement(
+            "h2",
+            { className: "name" },
+            "John Doe"
+          );
+          const role = React.createElement(
+            "p",
+            { className: "role" },
+            "Billy la Star"
+          );
+          const image = React.createElement("img", {
+            className: "profile-image",
+            src: "https://fr.pinterest.com/pin/23292123067738577/",
+            alt: "Profile Image",
+          });
+        }
+        const app = React.createElement("div", null, [name, role, img]);
+        root.render(app);
+    </script>
+  </body>
+</html>
