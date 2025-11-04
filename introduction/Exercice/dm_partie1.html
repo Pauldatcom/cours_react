@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partie 1 – useState & useEffect</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    header h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    
+    .content {
+      padding: 30px;
+    }
+    
+    .section {
+      margin-bottom: 40px;
+    }
+    
+    .section h2 {
+      color: #667eea;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #667eea;
+    }
+    
+    .section h3 {
+      color: #764ba2;
+      font-size: 1.4em;
+      margin: 25px 0 15px 0;
+    }
+    
+    .section h4 {
+      color: #555;
+      font-size: 1.2em;
+      margin: 20px 0 10px 0;
+    }
+    
+    .demo-box {
+      background: #1e293b;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      border: 2px solid #3b82f6;
+    }
+    
+    .explanation {
+      background: #f8f9fa;
+      border-left: 4px solid #667eea;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+    
+    .explanation p {
+      margin: 10px 0;
+    }
+    
+    .explanation ul {
+      margin: 10px 0 10px 20px;
+    }
+    
+    .explanation li {
+      margin: 8px 0;
+    }
+    
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      color: #e83e8c;
+    }
+    
+    pre {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+    
+    pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+    }
+    
+    .highlight {
+      background: #fff3cd;
+      padding: 15px;
+      border-left: 4px solid #ffc107;
+      margin: 15px 0;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Exercice – Explication de code et utilisation des Hooks</h1>
+      <p>Partie 1 – Compréhension du code</p>
+    </header>
+    
+    <div class="content">
+      <div class="section">
+        <h2>Code à analyser</h2>
+        <p>Voici un code que vous devez <strong>analyser et expliquer</strong>, en vous appuyant sur le cours et la documentation de React.</p>
+        
+        <div class="demo-box">
+          <div id="root"></div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>✏️ Travail demandé</h2>
+        
+        <div class="explanation">
+          <h3>1. Expliquez le fonctionnement du code</h3>
+          
+          <h4>Quel est le rôle de `useState` dans `Counter` et `App` ?</h4>
+          <ul>
+            <li><strong>Dans `Counter`</strong> : `useState(0)` initialise et gère l'état du compteur. Il retourne `count` (la valeur actuelle) et `setCount` (la fonction pour modifier cette valeur). Chaque fois que `setCount` est appelée, React met à jour l'état et re-rend le composant.</li>
+            <li><strong>Dans `App`</strong> : `useState(true)` gère l'état `status` qui contrôle l'affichage du composant `Counter`. Quand `status` est `true`, `Counter` est monté ; quand `status` est `false`, `Counter` est démonté.</li>
+          </ul>
+          
+          <h4>À quoi sert `useEffect` ici ?</h4>
+          <p>`useEffect` permet d'exécuter des effets de bord après le rendu du composant. Dans ce code, il log "MONTAGE / MISE À JOUR" avec la valeur de `count` à chaque fois que le composant se rend. Comme il n'y a pas de tableau de dépendances, l'effet s'exécute après <strong>chaque rendu</strong> du composant.</p>
+          
+          <h4>Quand la fonction de nettoyage est-elle appelée ?</h4>
+          <p>La fonction de nettoyage (la fonction retournée dans `useEffect`) est appelée :</p>
+          <ol>
+            <li><strong>Avant chaque nouveau rendu</strong> : Pour nettoyer l'effet du rendu précédent.</li>
+            <li><strong>Lors du démontage</strong> : Quand le composant `Counter` est retiré du DOM.</li>
+          </ol>
+          
+          <h4>Que se passe-t-il quand on clique sur "Changer le statut" ?</h4>
+          <p>Le clic inverse la valeur de `status`. Si `status` passe de `true` à `false`, la fonction de nettoyage s'exécute et `Counter` est démonté. Si `status` passe de `false` à `true`, `Counter` est monté avec `count` initialisé à 0 et `useEffect` s'exécute.</p>
+          
+          <h4>Quelle est la différence entre le montage, la mise à jour, et le démontage du composant `Counter` ?</h4>
+          <ul>
+            <li><strong>Montage</strong> : Première fois que `Counter` est ajouté au DOM. `useState` initialise `count` à 0, puis `useEffect` s'exécute.</li>
+            <li><strong>Mise à jour</strong> : Quand `count` change, React re-rend le composant. La fonction de nettoyage s'exécute d'abord, puis `useEffect` s'exécute à nouveau.</li>
+            <li><strong>Démontage</strong> : Quand `Counter` est retiré du DOM, la fonction de nettoyage s'exécute une dernière fois.</li>
+          </ul>
+        </div>
+        
+        <div class="explanation">
+          <h3>2. Appuyez-vous sur les concepts vus en cours</h3>
+          
+          <h4>Le cycle de vie d'un composant fonctionnel :</h4>
+          <p>Dans les composants fonctionnels React, le cycle de vie est géré par les Hooks :</p>
+          <ol>
+            <li><strong>Montage</strong> : Le composant est créé, `useState` initialise l'état, `useEffect` s'exécute.</li>
+            <li><strong>Mise à jour</strong> : Quand l'état change, React re-rend, la fonction de nettoyage s'exécute, puis `useEffect` peut s'exécuter à nouveau.</li>
+            <li><strong>Démontage</strong> : Le composant est retiré du DOM, la fonction de nettoyage s'exécute une dernière fois.</li>
+          </ol>
+          
+          <h4>Le comportement de `useEffect` à chaque rendu :</h4>
+          <p>Sans tableau de dépendances, `useEffect` s'exécute après <strong>chaque rendu</strong>. D'abord la fonction de nettoyage du rendu précédent s'exécute (log "NETTOYAGE"), puis le nouvel effet s'exécute (log "MONTAGE / MISE À JOUR").</p>
+          
+          <div class="highlight">
+            <strong>💡 Astuce :</strong> Ouvrez la console du navigateur (F12) pour voir les logs "MONTAGE / MISE À JOUR" et "NETTOYAGE" en temps réel !
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- React, ReactDOM et Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function Counter() {
+      const [count, setCount] = useState(0);
+
+      useEffect(() => {
+        console.log("MONTAGE / MISE À JOUR :", count);
+
+        // Fonction de nettoyage (appelée au démontage)
+        return () => {
+          console.log("NETTOYAGE :", count);
+        };
+      });
+
+      return (
+        <React.Fragment>
+          <p className="text-white text-lg mb-3">Compteur : {count}</p>
+          <button
+            onClick={() => setCount(count + 1)}
+            className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded mt-2 text-white"
+          >
+            +1
+          </button>
+        </React.Fragment>
+      );
+    }
+
+    function App() {
+      const [status, setStatus] = useState(true);
+
+      return (
+        <div className="bg-slate-800 p-4 rounded-xl shadow-lg">
+          <button
+            onClick={() => setStatus(!status)}
+            className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded mb-4 text-white"
+          >
+            Changer le statut
+          </button>
+
+          {status && <Counter />}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>

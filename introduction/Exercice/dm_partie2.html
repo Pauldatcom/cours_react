@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partie 2 – useReducer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    header {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    header h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    
+    .content {
+      padding: 30px;
+    }
+    
+    .section {
+      margin-bottom: 40px;
+    }
+    
+    .section h2 {
+      color: #4facfe;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #4facfe;
+    }
+    
+    .section h3 {
+      color: #00f2fe;
+      font-size: 1.4em;
+      margin: 25px 0 15px 0;
+    }
+    
+    .section h4 {
+      color: #555;
+      font-size: 1.2em;
+      margin: 20px 0 10px 0;
+    }
+    
+    .demo-box {
+      background: #1e293b;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      border: 2px solid #3b82f6;
+    }
+    
+    .explanation {
+      background: #f8f9fa;
+      border-left: 4px solid #4facfe;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+    
+    .explanation p {
+      margin: 10px 0;
+    }
+    
+    .explanation ul {
+      margin: 10px 0 10px 20px;
+    }
+    
+    .explanation li {
+      margin: 8px 0;
+    }
+    
+    .explanation ol {
+      margin: 10px 0 10px 20px;
+    }
+    
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      color: #e83e8c;
+    }
+    
+    pre {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+    
+    pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+    }
+    
+    .highlight {
+      background: #d1ecf1;
+      padding: 15px;
+      border-left: 4px solid #4facfe;
+      margin: 15px 0;
+      border-radius: 5px;
+    }
+    
+    .code-block {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Exercice – Exemple d'utilisation de `useReducer`</h1>
+      <p>Partie 2</p>
+    </header>
+    
+    <div class="content">
+      <div class="section">
+        <h2>Code complet de l'exemple</h2>
+        <p>Donnez un <strong>exemple simple</strong> d'un composant React utilisant le hook `useReducer` pour gérer un compteur. `useReducer` est comme un "super `useState`" qui permet de gérer des états complexes de manière plus structurée.</p>
+        
+        <div class="demo-box">
+          <div id="root"></div>
+        </div>
+        
+        <div class="code-block">
+          <h4>Code JSX :</h4>
+          <pre><code>import React, { useReducer } from "react";
+
+// Fonction reducer : gère les mises à jour de l'état en fonction du type d'action
+function reducer(state, action) {
+  switch (action.type) {
+    case "INCREMENT":
+      return { count: state.count + 1 };
+    
+    case "DECREMENT":
+      return { count: state.count - 1 };
+    
+    case "RESET":
+      return { count: 0 };
+    
+    case "ADD":
+      return { count: state.count + action.payload };
+    
+    default:
+      return state;
+  }
+}
+
+export default function CounterReducer() {
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
+
+  return (
+    &lt;div className="p-4 bg-slate-800 rounded-lg text-white"&gt;
+      &lt;h2&gt;Compteur avec useReducer&lt;/h2&gt;
+      &lt;p&gt;Compteur : {state.count}&lt;/p&gt;
+      &lt;button onClick={() => dispatch({ type: "INCREMENT" })}&gt;+1&lt;/button&gt;
+      &lt;button onClick={() => dispatch({ type: "DECREMENT" })}&gt;-1&lt;/button&gt;
+      &lt;button onClick={() => dispatch({ type: "RESET" })}&gt;Reset&lt;/button&gt;
+      &lt;button onClick={() => dispatch({ type: "ADD", payload: 5 })}&gt;+5&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>🔍 Explication simple de `useReducer`</h2>
+        
+        <div class="explanation">
+          <h3>Qu'est-ce que `useReducer` ?</h3>
+          <p>`useReducer` est une alternative à `useState` pour gérer l'état d'un composant. Au lieu de modifier directement l'état avec `setCount(count + 1)`, on envoie une "action" comme `dispatch({ type: "INCREMENT" })` et une fonction `reducer` calcule le nouvel état.</p>
+        </div>
+        
+        <div class="explanation">
+          <h3>Comment ça fonctionne ?</h3>
+          <ol>
+            <li><strong>La fonction `reducer`</strong> : Prend l'état actuel et une action, retourne le nouvel état selon le type d'action.</li>
+            <li><strong>Le hook `useReducer`</strong> : Prend deux arguments (la fonction reducer et l'état initial) et retourne l'état actuel et la fonction `dispatch`.</li>
+            <li><strong>La fonction `dispatch`</strong> : Permet d'envoyer une action au reducer (ex: `dispatch({ type: "INCREMENT" })`).</li>
+          </ol>
+        </div>
+        
+        <div class="explanation">
+          <h3>Exemple : Quand on clique sur "+1"</h3>
+          <ol>
+            <li>Le bouton appelle `dispatch({ type: "INCREMENT" })`</li>
+            <li>Le reducer reçoit l'état actuel et l'action</li>
+            <li>Le reducer retourne le nouvel état : `{ count: state.count + 1 }`</li>
+            <li>React met à jour l'affichage automatiquement</li>
+          </ol>
+        </div>
+        
+        <div class="highlight">
+          <strong>💡 Testez le code :</strong> Utilisez les boutons ci-dessus pour modifier le compteur et observer le fonctionnement de `useReducer` en action !
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- React, ReactDOM et Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script type="text/babel">
+    const { useReducer } = React;
+
+    // Fonction reducer : gère les mises à jour de l'état en fonction du type d'action
+    function reducer(state, action) {
+      switch (action.type) {
+        case "INCREMENT":
+          // Incrémente le compteur de 1
+          return { count: state.count + 1 };
+        
+        case "DECREMENT":
+          // Décrémente le compteur de 1
+          return { count: state.count - 1 };
+        
+        case "RESET":
+          // Remet le compteur à 0
+          return { count: 0 };
+        
+        case "ADD":
+          // Ajoute une valeur spécifique (passée via action.payload)
+          return { count: state.count + action.payload };
+        
+        default:
+          // Retourne l'état inchangé si l'action n'est pas reconnue
+          return state;
+      }
+    }
+
+    function CounterReducer() {
+      // useReducer retourne l'état actuel et la fonction dispatch
+      // 1er argument : la fonction reducer
+      // 2ème argument : l'état initial
+      const [state, dispatch] = useReducer(reducer, { count: 0 });
+
+      return (
+        <div className="bg-slate-800 p-8 rounded-xl shadow-2xl">
+          <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            Compteur avec useReducer
+          </h2>
+          
+          <div className="bg-slate-700 rounded-lg p-6 mb-6 text-center">
+            <p className="text-sm text-gray-400 mb-2">Valeur actuelle</p>
+            <p className="text-5xl font-bold text-blue-400">{state.count}</p>
+          </div>
+          
+          <div className="flex gap-3 flex-wrap justify-center">
+            <button
+              onClick={() => dispatch({ type: "DECREMENT" })}
+              className="bg-red-600 hover:bg-red-700 active:scale-95 px-6 py-3 rounded-lg transition-all duration-200 font-semibold shadow-lg text-white"
+            >
+              -1
+            </button>
+            
+            <button
+              onClick={() => dispatch({ type: "RESET" })}
+              className="bg-gray-600 hover:bg-gray-700 active:scale-95 px-6 py-3 rounded-lg transition-all duration-200 font-semibold shadow-lg text-white"
+            >
+              Réinitialiser
+            </button>
+            
+            <button
+              onClick={() => dispatch({ type: "INCREMENT" })}
+              className="bg-blue-600 hover:bg-blue-700 active:scale-95 px-6 py-3 rounded-lg transition-all duration-200 font-semibold shadow-lg text-white"
+            >
+              +1
+            </button>
+            
+            <button
+              onClick={() => dispatch({ type: "ADD", payload: 5 })}
+              className="bg-green-600 hover:bg-green-700 active:scale-95 px-6 py-3 rounded-lg transition-all duration-200 font-semibold shadow-lg text-white"
+            >
+              +5
+            </button>
+          </div>
+
+          <div className="mt-6 p-4 bg-slate-700 rounded-lg text-sm text-gray-300">
+            <p className="font-semibold mb-2">💡 Comment ça marche ?</p>
+            <ul className="list-disc list-inside space-y-1 text-xs">
+              <li>Chaque bouton appelle <code className="bg-slate-600 px-1 rounded">dispatch()</code> avec une action</li>
+              <li>Le reducer traite l'action et retourne le nouvel état</li>
+              <li>React met à jour automatiquement l'affichage</li>
+            </ul>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<CounterReducer />);
+  </script>
+</body>
+</html>
