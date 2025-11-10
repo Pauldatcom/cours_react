@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-// Bear store example - following the Zustand docs pattern
+// following the exact same pattern as the doc in zustand
 const useBearStore = create((set) => ({
   // State
   bears: 0,
