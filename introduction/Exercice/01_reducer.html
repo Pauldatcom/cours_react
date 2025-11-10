@@ -160,8 +160,22 @@
           <h4>Code JSX :</h4>
           <pre><code>import React, { useReducer } from "react";
 
+// TypeScript type definitions
+interface CalculatorState {
+  a: string;
+  b: string;
+  result: number;
+  error: string;
+}
+
+type CalculatorAction =
+  | { type: "SET_A"; payload: string }
+  | { type: "SET_B"; payload: string }
+  | { type: "CALCULATE" }
+  | { type: "RESET" };
+
 // État initial
-const initialState = {
+const initialState: CalculatorState = {
   a: "",
   b: "",
   result: 0,
@@ -169,7 +183,10 @@ const initialState = {
 };
 
 // Fonction reducer : gère les mises à jour de l'état en fonction du type d'action
-function calculatorReducer(state, action) {
+function calculatorReducer(
+  state: CalculatorState,
+  action: CalculatorAction
+): CalculatorState {
   switch (action.type) {
     case "SET_A":
       return { ...state, a: action.payload, error: "" };
@@ -178,8 +195,8 @@ function calculatorReducer(state, action) {
       return { ...state, b: action.payload, error: "" };
     
     case "CALCULATE":
-      const numA = parseFloat(state.a);
-      const numB = parseFloat(state.b);
+      const numA: number = parseFloat(state.a);
+      const numB: number = parseFloat(state.b);
       
       if (state.a === "" || state.b === "") {
         return { ...state, error: "Please enter both numbers" };
@@ -199,21 +216,28 @@ function calculatorReducer(state, action) {
   }
 }
 
-export default function Calculator() {
-  const [state, dispatch] = useReducer(calculatorReducer, initialState);
+export default function Calculator(): JSX.Element {
+  const [state, dispatch]: [
+    CalculatorState,
+    React.Dispatch&lt;CalculatorAction&gt;
+  ] = useReducer(calculatorReducer, initialState);
 
   return (
     &lt;div&gt;
       &lt;input 
         value={state.a} 
-        onChange={(e) => dispatch({ type: "SET_A", payload: e.target.value })} 
+        onChange={(e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; {
+          dispatch({ type: "SET_A", payload: e.target.value });
+        }} 
       /&gt;
       &lt;span&gt; + &lt;/span&gt;
       &lt;input 
         value={state.b} 
-        onChange={(e) => dispatch({ type: "SET_B", payload: e.target.value })} 
+        onChange={(e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; {
+          dispatch({ type: "SET_B", payload: e.target.value });
+        }} 
       /&gt;
-      &lt;button onClick={() => dispatch({ type: "CALCULATE" })}&gt;Calculate&lt;/button&gt;
+      &lt;button onClick={() =&gt; dispatch({ type: "CALCULATE" })}&gt;Calculate&lt;/button&gt;
       &lt;p&gt;Result: {state.result}&lt;/p&gt;
       {state.error && &lt;p&gt;{state.error}&lt;/p&gt;}
     &lt;/div&gt;
@@ -264,16 +288,34 @@ export default function Calculator() {
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script type="text/babel">
+    // @ts-nocheck - TypeScript types are handled by Babel standalone
     const { useReducer } = React;
 
-    const initialState = {
+    // TypeScript type definitions
+    interface CalculatorState {
+      a: string;
+      b: string;
+      result: number;
+      error: string;
+    }
+
+    type CalculatorAction =
+      | { type: "SET_A"; payload: string }
+      | { type: "SET_B"; payload: string }
+      | { type: "CALCULATE" }
+      | { type: "RESET" };
+
+    const initialState: CalculatorState = {
       a: "",
       b: "",
       result: 0,
       error: ""
     };
 
-    function calculatorReducer(state, action) {
+    function calculatorReducer(
+      state: CalculatorState,
+      action: CalculatorAction
+    ): CalculatorState {
       switch (action.type) {
         case "SET_A":
           return {
@@ -290,8 +332,8 @@ export default function Calculator() {
           };
         
         case "CALCULATE":
-          const numA = parseFloat(state.a);
-          const numB = parseFloat(state.b);
+          const numA: number = parseFloat(state.a);
+          const numB: number = parseFloat(state.b);
           
           if (state.a === "" || state.b === "") {
             return {
@@ -321,10 +363,13 @@ export default function Calculator() {
       }
     }
 
-    function Calculator() {
-      const [state, dispatch] = useReducer(calculatorReducer, initialState);
+    function Calculator(): JSX.Element {
+      const [state, dispatch]: [
+        CalculatorState,
+        React.Dispatch<CalculatorAction>
+      ] = useReducer(calculatorReducer, initialState);
 
-      const handleSubmit = (e) => {
+      const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         dispatch({ type: "CALCULATE" });
       };
@@ -344,7 +389,9 @@ export default function Calculator() {
               <input
                 type="text"
                 value={state.a}
-                onChange={(e) => dispatch({ type: "SET_A", payload: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                  dispatch({ type: "SET_A", payload: e.target.value });
+                }}
                 placeholder="Enter first number"
                 className="w-full px-4 py-3 rounded-lg bg-slate-700 text-white border-2 border-slate-600 focus:border-blue-500 focus:outline-none transition-colors"
               />
@@ -363,7 +410,9 @@ export default function Calculator() {
               <input
                 type="text"
                 value={state.b}
-                onChange={(e) => dispatch({ type: "SET_B", payload: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                  dispatch({ type: "SET_B", payload: e.target.value });
+                }}
                 placeholder="Enter second number"
                 className="w-full px-4 py-3 rounded-lg bg-slate-700 text-white border-2 border-slate-600 focus:border-blue-500 focus:outline-none transition-colors"
               />
@@ -393,7 +442,10 @@ export default function Calculator() {
               
               <button
                 type="button"
-                onClick={() => dispatch({ type: "RESET" })}
+                onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
+                  e.preventDefault();
+                  dispatch({ type: "RESET" });
+                }}
                 className="flex-1 bg-gray-600 hover:bg-gray-700 active:scale-95 px-6 py-3 rounded-lg transition-all duration-200 font-semibold shadow-lg text-white"
               >
                 Reset
