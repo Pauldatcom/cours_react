@@ -16,45 +16,110 @@ The React Compiler is not enabled on this template because of its impact on dev 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
 
 
-Decription
-Dans ce TP on va ajouter un useEffect pour réviser cette notion.
+## Project Description
 
-Une LED supplémentaire au-dessus (bleue), La possibilité de la démonter et de la remonter, Un compteur de changements d'état affiché uniquement quand la LED est démontée
+This project is an educational React application focused on learning and practicing the **Higher-Order Component (HOC)** pattern. It includes a working LED panel demo with HOC-enhanced controls, plus a comprehensive set of HOC practice exercises.
 
-Hooks utilisés :
+## What's Included
 
-useReducer pour gérer l'état de la LED active (cycle rouge → jaune → vert)
+### 1. LED Panel Demo (`src/composant/App.jsx` & `ledPannels.jsx`)
+- Interactive LED panel with red, yellow, and green LEDs
+- Blue LED that can be mounted/unmounted
+- State management using `useReducer` and `useState`
+- Control buttons enhanced with HOCs (click counting and logging)
 
-useState pour : Suivre le nombre de changements d'état Gérer si la LED du haut est montée ou démontée Stocker la valeur du compteur au moment du démontage
+### 2. HOC Examples (`src/composant/hocs.jsx`)
+Educational HOC implementations demonstrating core patterns:
+- **`withClickCounter`** - Adds click counting functionality
+- **`withLogger`** - Adds lifecycle and prop change logging
+- **`withAnimation`** - Adds fade-in animation on mount
+- **`withMountTracking`** - Tracks mount/unmount events
 
-useEffect pour détecter et compter automatiquement les changements d'état
+### 3. HOC Practice Exercises (`src/composant/hocPractice.jsx`)
+Five completed beginner exercises:
 
-Props pour transmettre l'état et les actions au composant d'affichage
+#### ✅ Exercise 1: `withHover`
+- Tracks hover state
+- Passes `isHovered`, `onMouseEnter`, `onMouseLeave` to wrapped component
+- Demonstrates event interception pattern
 
-Conditionnel rendu afin d'afficher :
+#### ✅ Exercise 2: `withLoading`
+- Manages loading state
+- Provides `isLoading` and `setLoading` function
+- Useful for async operations
 
-LED bleue + bouton "Démontage" lorsqu'elle est montée Valeur mémorisée + bouton "Remontage" lorsqu'elle est démontée
+#### ✅ Exercise 3: `withToggle`
+- Manages toggle state (on/off)
+- Provides `isOn`, `toggle`, and `setIsOn`
+- Demonstrates state + convenience functions
 
-Transitions visuelles via Tailwind pour conserver une interface claire et lisible
-Organisation des composants
-Identique à l'autre TP on va créer deux composants App et LedPanel.
+#### ✅ Exercise 4: `withLocalStorage`
+- Syncs component state with browser localStorage
+- Persists data across page refreshes
+- Demonstrates HOC factory pattern and side effects with `useEffect`
 
-Composant principal (App) :
+#### ✅ Exercise 5: `withDebounce`
+- Debounces function calls (delays execution)
+- Uses `useRef` and `setTimeout` for timer management
+- Demonstrates function manipulation and cleanup
 
-Gère l'état des LEDs principales via useReducer
-Incrémente automatiquement un compteur à chaque changement d'état.
-Contrôle le montage/démontage de la LED bleue + mémorisation de la valeur du compteur
-Vous devez afficher le résultat du compteur une fois le composant démonté dans la page
+### 4. Practice Exercises Guide (`HOC_PRACTICE_EXERCISES.md`)
+Comprehensive guide with:
+- 12+ exercises from beginner to expert level
+- Clear requirements and hints for each exercise
+- Real-world use cases
+- Tips and checklists
 
-Composant d'affichage (LedPanel) :
+## Key Concepts Learned
 
-Affiche les 3 LEDs principales avec mise en évidence de la LED active
-Gère l'affichage de la LED bleue selon deux modes :
-Montée : LED + bouton "Démontage" Démontée : affichage du compteur + bouton "Remontage"
+### HOC Pattern
+- Function that takes a component and returns an enhanced component
+- Allows code reuse and separation of concerns
+- Can intercept events, provide state, add side effects, and more
 
-Mise en forme cohérente via Tailwind (taille, opacité, ombre, transitions), récupérez les design déjà écrit.
+### React Hooks Used
+- `useState` - State management in HOCs
+- `useEffect` - Side effects (localStorage, cleanup)
+- `useRef` - Storing mutable values (timers, etc.)
 
-Résultat attendu :
+### Advanced Patterns
+- **HOC Factory** - HOCs that accept configuration parameters
+- **HOC Composition** - Combining multiple HOCs together
+- **Prop Forwarding** - Passing through original props while adding new ones
+- **Event Interception** - Wrapping event handlers while preserving original behavior
 
-Un panneau interactif permettant de suivre l'activité du système grâce au compteur
-Un montage/démontage propre et visuel de la LED supplémentaire
+## How to Use
+
+1. **Run the app**: `npm run dev`
+2. **View HOC demos**: The main page shows working HOC examples
+3. **Practice exercises**: Click "Show Practice Area" to see interactive HOC exercises
+4. **Read the guide**: Check `HOC_PRACTICE_EXERCISES.md` for more exercises to try
+
+## File Structure
+
+```
+src/composant/
+├── App.jsx              # Main app with LED panel and HOC demos
+├── ledPannels.jsx        # LED panel component
+├── hocs.jsx             # Educational HOC examples
+├── hocPractice.jsx      # HOC practice exercises (5 completed)
+└── ButtonWithHOC.jsx    # Demo component showing HOC usage
+
+HOC_PRACTICE_EXERCISES.md # Comprehensive exercise guide
+```
+
+## Technologies Used
+
+- **React** - Component library
+- **Vite** - Build tool and dev server
+- **Tailwind CSS** - Styling
+- **ESLint** - Code linting
+
+## Learning Outcomes
+
+After completing these exercises, you understand:
+- How to create and use Higher-Order Components
+- How to compose multiple HOCs together
+- How to manage state and side effects in HOCs
+- How to intercept and enhance event handlers
+- How to create reusable, composable React patterns
