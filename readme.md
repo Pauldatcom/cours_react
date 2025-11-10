@@ -145,3 +145,6 @@ npm run dev
 - Apprendre les patterns avancés (HOC, composition)
 - Découvrir la gestion d'état globale (Zustand)
 - Pratiquer avec des projets concrets et progressifs
+
+- TODO Revoir les cours QCM Vendredi 14/10 
+- TODO Read the doc about tanstack routing
