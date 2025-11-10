@@ -21,16 +21,16 @@ function reducer(state, action) {
     case 'NEXT':
       const currentIndex = LED_ORDER.indexOf(state.active)
       const nextIndex = (currentIndex + 1) % LED_ORDER.length
-      return { active: LED_ORDER[nextIndex] }
+      return { ...state, active: LED_ORDER[nextIndex] }
 
     case 'PREV':
       // Cycle backward: red → green → yellow → red
       const prevIndex = LED_ORDER.indexOf(state.active)
       const newIndex = prevIndex === 0 ? LED_ORDER.length - 1 : prevIndex - 1
-      return { active: LED_ORDER[newIndex] }
+      return { ...state, active: LED_ORDER[newIndex] }
 
     case 'RESET':
-      return { active: 'red' }
+      return { ...state, active: 'red' }
 
     default:
       return state
