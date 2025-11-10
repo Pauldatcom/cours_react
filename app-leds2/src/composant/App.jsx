@@ -1,5 +1,7 @@
 import React, { useReducer, useState, useEffect, useRef } from 'react'
 import LedPanel from './ledPannels.jsx'
+import ButtonWithHOCDemo from './ButtonWithHOC.jsx'
+import { withClickCounter, withLogger } from './hocs.jsx'
 
 const LED_ORDER = ['red', 'yellow', 'green']
 
@@ -27,6 +29,29 @@ function reducer(state, action) {
       return state
   }
 }
+
+// Base button component for HOC demonstration
+function BaseControlButton({ children, onClick, clickCount, className = '' }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-6 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors duration-200 font-medium ${className}`}
+    >
+      {children}
+      {/* Show click count if provided by HOC */}
+      {clickCount !== undefined && clickCount > 0 && (
+        <span className="ml-2 text-xs opacity-60">({clickCount})</span>
+      )}
+    </button>
+  )
+}
+
+// Enhanced buttons using HOCs
+// withLogger wraps withClickCounter - order matters!
+const EnhancedControlButton = withLogger(
+  withClickCounter(BaseControlButton),
+  'ControlButton'
+)
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -61,9 +86,20 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-gray-100">
-      <div className="space-y-8">
-        {/* Pass state and handlers to the LedPanel component */}
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-gray-100 py-8">
+      <div className="space-y-8 max-w-4xl w-full px-4">
+        {/* HOC Demo Section - Educational Example */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-center mb-4">
+            Higher-Order Component (HOC) Pattern Demo
+          </h2>
+          <p className="text-center text-gray-400 mb-4 text-sm">
+            Open browser console to see HOC logging in action
+          </p>
+          <ButtonWithHOCDemo />
+        </div>
+
+        {/* LED Panel Section */}
         <LedPanel 
           active={state.active}
           isBlueLedMounted={isBlueLedMounted}
@@ -72,25 +108,23 @@ function App() {
           onMount={handleMount}
         />
 
+        {/* Control Buttons - Using HOCs */}
         <div className="flex gap-4 justify-center">
-          <button
+          <EnhancedControlButton
             onClick={() => dispatch({ type: 'PREV' })}
-            className="px-6 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors duration-200 font-medium"
           >
             PREV
-          </button>
-          <button
+          </EnhancedControlButton>
+          <EnhancedControlButton
             onClick={() => dispatch({ type: 'RESET' })}
-            className="px-6 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors duration-200 font-medium"
           >
             RESET
-          </button>
-          <button
+          </EnhancedControlButton>
+          <EnhancedControlButton
             onClick={() => dispatch({ type: 'NEXT' })}
-            className="px-6 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors duration-200 font-medium"
           >
             NEXT
-          </button>
+          </EnhancedControlButton>
         </div>
       </div>
     </div>
